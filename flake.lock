@@ -26,16 +26,15 @@
       "locked": {
         "lastModified": 1787565063,
         "narHash": "sha256-dXJcPoms68y/g+QBzihxiPQE6PZiYDPIu84smf0VV7Q=",
-        "ref": "main",
+        "owner": "mulatta",
+        "repo": "qmk-nix",
         "rev": "eb6e5a22f61f1ca01152fa3fcb62a190ef5ba740",
-        "revCount": 1,
-        "type": "git",
-        "url": "file:///Users/seungwon/git/qmk-nix"
+        "type": "github"
       },
       "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "file:///Users/seungwon/git/qmk-nix"
+        "owner": "mulatta",
+        "repo": "qmk-nix",
+        "type": "github"
       }
     },
     "root": {

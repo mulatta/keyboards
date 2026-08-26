@@ -5,7 +5,7 @@
     nixpkgs.url = "git+https://github.com/mulatta/nixpkgs?shallow=1&ref=main";
     qmk-nix = {
       inputs.nixpkgs.follows = "nixpkgs";
-      url = "git+file:///Users/seungwon/git/qmk-nix?ref=main";
+      url = "github:mulatta/qmk-nix";
     };
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
