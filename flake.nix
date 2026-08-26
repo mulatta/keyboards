@@ -3,6 +3,10 @@
 
   inputs = {
     nixpkgs.url = "git+https://github.com/mulatta/nixpkgs?shallow=1&ref=main";
+    qmk-nix = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "git+file:///Users/seungwon/git/qmk-nix?ref=main";
+    };
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
@@ -11,6 +15,7 @@
     {
       self,
       nixpkgs,
+      qmk-nix,
       treefmt-nix,
     }:
     let
@@ -46,10 +51,43 @@
       checks = eachSystem (
         { system, ... }:
         {
+          firmware = self.packages.${system}.firmware;
           formatting = treefmtEval.${system}.config.build.check self;
         }
       );
 
+      devShells = eachSystem (
+        { pkgs, ... }:
+        {
+          default = pkgs.mkShellNoCC {
+            packages = [
+              pkgs.qmk
+              pkgs.zapp
+            ];
+          };
+        }
+      );
+
       formatter = eachSystem ({ system, ... }: treefmtEval.${system}.config.build.wrapper);
+
+      packages = eachSystem (
+        { pkgs, system }:
+        let
+          firmware = pkgs.callPackage ./nix/zsa-firmware.nix {
+            inherit (qmk-nix.legacyPackages.${system}) buildQmkFirmware;
+          };
+          flash = pkgs.writeShellApplication {
+            name = "zsa-flash";
+            runtimeInputs = [ pkgs.zapp ];
+            text = ''
+              zapp flash ${firmware}/firmware.bin
+            '';
+          };
+        in
+        {
+          default = firmware;
+          inherit firmware flash;
+        }
+      );
     };
 }
